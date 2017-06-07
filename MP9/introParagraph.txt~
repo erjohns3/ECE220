@@ -1,0 +1,1 @@
+The purpose of this program is to create a WAV from a file and print out information about the WAV that makes more sense for a human than the information directly from the file.  The program then creates another file that contains a looped sample of the input file.  The amount and the start and end of the sample is chosen by the user.

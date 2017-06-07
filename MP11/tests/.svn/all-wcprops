@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests
+END
+test_file.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/test_file.c
+END
+test_utils.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/test_utils.c
+END
+test_utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/test_utils.h
+END
+test_ai
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/fa14-ece198kl/!svn/ver/29338/erjohns3/MP11/tests/test_ai
+END
+test_game
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/fa14-ece198kl/!svn/ver/29338/erjohns3/MP11/tests/test_game
+END
+test_ai.c
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/test_ai.c
+END
+test_game.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/test_game.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/tests/Makefile
+END
+test_file
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/fa14-ece198kl/!svn/ver/29338/erjohns3/MP11/tests/test_file
+END

@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src
+END
+ai.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/ai.h
+END
+game.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/game.h
+END
+file.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/file.c
+END
+view.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/view.h
+END
+file.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/file.h
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/main.c
+END
+README.macosx
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/README.macosx
+END
+ai.c
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/fa14-ece198kl/!svn/ver/29338/erjohns3/MP11/src/ai.c
+END
+game.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/29338/erjohns3/MP11/src/game.c
+END
+view.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/view.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/fa14-ece198kl/!svn/ver/28084/erjohns3/MP11/src/Makefile
+END

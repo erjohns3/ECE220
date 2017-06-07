@@ -1,0 +1,1 @@
+The purpose of this program is to make the second part of the snake game.  I had to make functions to be able to update the snake head and snake tail which used other functions that I made that made a new snake segment that would become the new head and a function that removed the tail.

@@ -1,0 +1,39 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	LOOP3             3008
+//	LOOP1             300A
+//	SKIP              300D
+//	LOOP2             300E
+//	PRINT_ARRAY       3019
+//	LOOP4             301D
+//	DB_START          3022
+//	AR_START          3023
+//	PRINT_FOUR_HEX    3025
+//	LOOP              302B
+//	SPACE             3036
+//	NXT_LN            3037
+//	PFH_R7            3038
+//	PRINT_HEX_DIGIT   3039
+//	SHIFT_LOOP        3041
+//	DIG_LOOP          3045
+//	BIT_LOOP          3047
+//	MSB_CLEAR         304B
+//	HIGH_DIGIT        3053
+//	PRINT_DIGIT       3054
+//	ASC_ZERO          3060
+//	ASC_HIGH          3061
+//	PHD_R2            3062
+//	PHD_R3            3063
+//	PHD_R4            3064
+//	PHD_R5            3065
+//	PHD_R6            3066
+//	PHD_R7            3067
+//	PRINT_CHAR        3068
+//	PRINT             3069
+//	PRINT_CHAR_R0     306E
+//	PRINT_CHAR_R7     306F
+//	DSR_ADDR          3070
+//	DDR_ADDR          3071
+

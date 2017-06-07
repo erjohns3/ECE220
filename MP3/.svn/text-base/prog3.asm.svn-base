@@ -1,0 +1,308 @@
+;									tab:8
+;
+; prog3.asm - starting code for ECE198KL Spring 2013 Program 3
+;
+; "Copyright (c) 2013 by Steven S. Lumetta.
+;
+; Permission to use, copy, modify, and distribute this software and its
+; documentation for any purpose, without fee, and without written agreement is
+; hereby granted, provided that the above copyright notice and the following
+; two paragraphs appear in all copies of this software.
+; 
+; IN NO EVENT SHALL THE AUTHOR OR THE UNIVERSITY OF ILLINOIS BE LIABLE TO 
+; ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL 
+; DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, 
+; EVEN IF THE AUTHOR AND/OR THE UNIVERSITY OF ILLINOIS HAS BEEN ADVISED 
+; OF THE POSSIBILITY OF SUCH DAMAGE.
+; 
+; THE AUTHOR AND THE UNIVERSITY OF ILLINOIS SPECIFICALLY DISCLAIM ANY 
+; WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+; MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE 
+; PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND NEITHER THE AUTHOR NOR
+; THE UNIVERSITY OF ILLINOIS HAS ANY OBLIGATION TO PROVIDE MAINTENANCE, 
+; SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+;
+; Author:	    Steve Lumetta
+; Version:	    1.00
+; Creation Date:    26 January 2013
+; Filename:	    prog3.asm
+; History:
+;	SL	1.00	26 January 2013
+;		First written.
+;
+
+	.ORIG	x3000		; starting address is x3000
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; BUILD ARRAY
+
+;   R0 -- record counter
+;   R1 -- array pointer
+;   R2 -- database pointer
+;   R3 -- choice counter
+;   R5 -- record counter
+;   R6 -- temporary
+
+	AND	R5,R5,#0	; set R5 to 0
+	ADD	R5,R5,#1	; set R5 to 1
+	LD	R1,AR_START	; load starting address of array onto R1
+	LD	R2,DB_START	; load starting address of database onto R2
+	STI	R2,AR_START	; store to the address of database into the address of array
+	LDI	R6,DB_START	; load data at database into R6
+	BRz	SKIP		; if its null skip the string loop
+	BR	LOOP1		; skip the storing of the database address into array
+LOOP3
+	STR	R2,R1,#0	; store the database address into array
+	ADD	R5,R5,#1	; increment record counter
+LOOP1
+	ADD	R2,R2,#1	; increment the database pointer
+	LDR	R6,R2,#0	; load the data at the database onto R6
+	BRp	LOOP1		; loop back until the data is null
+SKIP
+	AND	R3,R3,#0	; reset the choice counter
+LOOP2	
+	ADD	R2,R2,#1	; increment the database pointer
+	ADD	R1,R1,#1	; increment the array pointer
+	LDR	R6,R2,#0	; load the data at the database onto R6
+	STR	R6,R1,#0	; store R6 into the data in the array
+	ADD	R3,R3,#1	; increment the choice counter
+	ADD	R6,R3,#-3	; check to see if 3 choices have been stored in array
+	BRn	LOOP2		; loop back if not all choices are stored
+	ADD	R1,R1,#1	; increment the array pointer
+	ADD	R2,R2,#1	; increment the database pointer
+	LDR	R6,R2,#0	; load the data at the database onto R6
+	BRp	LOOP3		; loop back if data is not null
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+PRINT_ARRAY
+	NOT	R5,R5		; invert R5
+	ADD	R5,R5,#1	; invert R5
+	LD	R4,AR_START	; load start address of array onto R4
+	AND	R0,R0,#0	; reset record counter
+LOOP4
+	JSR PRINT_FOUR_HEX	; run PRINT_FOUR_HEX subroutine
+	ADD	R4,R4,#1	; increment array pointer
+	ADD	R0,R0,#1	; increment record counter
+	ADD	R6,R0,R5	; check record counter
+	BRn	LOOP4		; loop back if not all records checked
+	BR	GAME		; goes to game
+
+DB_START	.FILL x5000	; starting address of database
+AR_START	.FILL x4000	; starting address of array
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; For Program 2, you must wrap the following code up as a subroutine.
+;
+; This code relies on another subroutine called PRINT_CHAR
+;   that prints a single ASCII character in the low 8 bits of R2
+;   to the monitor.  The PRINT_CHAR call must not change any registers
+;   (other than R7)!
+;
+; Subroutine PRINT_HEX_DIGIT
+;   input: R3 -- 8-bit value to be printed as hex (high bits ignored)
+;   caller-saved registers: R7 (as always with LC-3)
+;   callee-saved registers: all other registers
+;
+
+PRINT_FOUR_HEX
+
+; registers used in this subroutine
+;   R0 -- record counter
+;   R1 -- choice counter
+;   R2 -- ASCII character to be printed by PRINT_CHAR
+;   R3 -- ASCII character to be printed by PRINT_HEX_DIGIT
+;   R4 -- Array pointer
+;   R6 -- temporary
+
+	ST	R7,PFH_R7	; save R7 during PRINT_FOUR_HEX
+
+	LD	R2,SPACE	; load space ascii value onto R2
+	AND	R1,R1,#0	; set R1 to 0
+	AND	R3,R3,#0	; set R3 to 0
+	ADD	R3,R0,#0	; set R3 to R0
+	JSR PRINT_HEX_DIGIT	; run PRINT_HEX_DIGIT subroutine
+LOOP 
+	JSR PRINT_CHAR		; run PRINT_CHAR subroutine
+	ADD	R4,R4,#1	; increment array pointer
+	LDR	R3,R4,#0	; load the data of array at the pointer onto R3
+	JSR PRINT_HEX_DIGIT	; run PRINT_HEX_DIGIT subroutine
+	ADD	R1,R1,#1	; increment choice counter
+	ADD	R6,R1,-3	; check the choice counter
+	BRn	LOOP		; loop if 3 choices have been printed
+	LD	R2,NXT_LN	; load next line ascii value onto R2
+	JSR PRINT_CHAR		; run PRINT_CHAR subroutine
+
+	LD	R7,PFH_R7	; restore previous R7
+
+	RET
+
+SPACE		.FILL #32	; ascii value for space
+NXT_LN		.FILL #10	; ascii value for next line
+PFH_R7		.BLKW #1	; block for saving previous R7
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+PRINT_HEX_DIGIT
+
+; registers used in this subroutine
+;   R2 -- ASCII character to be printed
+;   R3 -- 8-bit value to be printed as hex (high bits ignored)
+;   R4 -- bit counter
+;   R5 -- digit counter
+;   R6 -- temporary
+
+	ST	R2, PHD_R2	; Save R2
+	ST	R3, PHD_R3	; Save R3
+	ST	R4, PHD_R4	; Save R4
+	ST	R5, PHD_R5	; Save R5
+	ST	R6, PHD_R6	; Save R6
+	ST	R7, PHD_R7	; Save R7
+
+	; print low 8 bits of R3 as hexadecimal
+
+	; shift R3 up 8 bits
+	AND R2,R2,#0		; initialize shift count to 8
+	ADD R2,R2,#8
+SHIFT_LOOP
+	ADD R3,R3,R3		; shift one bit
+	ADD R2,R2,#-1		; count down
+	BRp SHIFT_LOOP		; keep going until we're done
+
+	AND R5,R5,#0		; initialize digit count to 0
+DIG_LOOP
+	AND R4,R4,#0		; initialize bit count to 0
+	AND R2,R2,#0		; initialize current digit to 0
+BIT_LOOP
+	ADD R2,R2,R2		; double the current digit (shift left)
+	ADD R3,R3,#0		; is the MSB set?
+	BRzp MSB_CLEAR
+	ADD R2,R2,#1		; if so, add 1 to digit
+MSB_CLEAR
+	ADD R3,R3,R3		; now get rid of that bit (shift left)
+	ADD R4,R4,#1		; increment the bit count
+	ADD R6,R4,#-4		; have four bits yet?
+	BRn BIT_LOOP		; if not, go get another
+
+	ADD R6,R2,#-10		; is the digit >= 10?
+	BRzp HIGH_DIGIT		; if so, we need to print a letter
+	LD R6,ASC_ZERO		; add '0' to digits < 10
+	BRnzp PRINT_DIGIT
+HIGH_DIGIT
+	LD R6,ASC_HIGH		; add 'A' - 10 to digits >= 10
+PRINT_DIGIT
+	ADD R2,R2,R6		; calculate the digit
+
+	JSR PRINT_CHAR		; print the digit
+
+	ADD R5,R5,#1		; increment the digit count
+	ADD R6,R5,#-2		; printed both digits yet?
+	BRn DIG_LOOP		; if not, go print another
+
+	LD	R2, PHD_R2	; Restore previous R2
+	LD	R3, PHD_R3	; Restore previous R3
+	LD	R4, PHD_R4	; Restore previous R4
+	LD	R5, PHD_R5	; Restore previous R5
+	LD	R6, PHD_R6	; Restore previous R6
+	LD	R7, PHD_R7	; Restore previous R7
+
+	RET
+
+ASC_ZERO	.FILL x0030	; ASCII '0'
+ASC_HIGH	.FILL x0037	; ASCII 'A' - 10
+PHD_R2		.BLKW #1	; Block to save R2 during PRINT_HEX_DIGIT
+PHD_R3		.BLKW #1	; Block to save R3 during PRINT_HEX_DIGIT
+PHD_R4		.BLKW #1	; Block to save R4 during PRINT_HEX_DIGIT
+PHD_R5		.BLKW #1	; Block to save R5 during PRINT_HEX_DIGIT
+PHD_R6		.BLKW #1	; Block to save R6 during PRINT_HEX_DIGIT
+PHD_R7		.BLKW #1	; Block to save R7 during PRINT_HEX_DIGIT
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Subroutine PRINT_CHAR
+;   input: R2 -- 8-bit ASCII character to print to monitor
+;   caller-saved registers: R7 (as always with LC-3)
+;   callee-saved registers: all other registers
+
+PRINT_CHAR
+	ST	R0,PRINT_CHAR_R0	; save R0 to memory
+PRINT
+	LDI	R0, DSR_ADDR		; load data at DSR_ADDR onto R0
+	BRzp	PRINT			; if status bit isn't 1, check again
+	STI	R2, DDR_ADDR		; store the value of R2 into the data at DDR_ADDR
+	
+	LD	R0,PRINT_CHAR_R0	; restore R0 from memory
+	RET
+
+PRINT_CHAR_R0	.BLKW #1		; Block to save R0 during PRINT_CHAR
+PRINT_CHAR_R7	.BLKW #1		; Block to save R7 during PRINT_CHAR
+DSR_ADDR	.FILL xFE04		; address of the display status register
+DDR_ADDR	.FILL xFE06		; address of the display data register
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+GAME
+
+; R0: printing text, getting input characters
+; R2: array pointer
+; R3: temporary register
+; R4: stores beginning of array
+; R6: page number
+
+	LEA 	R0,P3_START_STR	; puts the address of the start string in R0
+	PUTS			; prints start string
+	LD 	R4,AR_START	; load start of array onto R4
+	AND 	R6,R6,#0	; reset R6
+PAGE_LOOP
+	AND 	R2,R2,#0	; reset R2
+	ADD 	R2,R6,R6 	; set R2 to page number multiplied by 2
+	ADD 	R2,R2,R2	; set R2 to page number multiplied by 4 
+	ADD 	R2,R2,R4	; add start of array address to R2
+	LDR 	R0,R2,#0	; load data at R2 into R0
+	PUTS			; print string at R0
+	LDR	R3,R2,#1	; check if first choice is valid
+	BRn	DONE		; finish the game if first choice is invalid
+	LEA 	R0,P3_PROMPT_STR	; load address of prompt string into R0
+	PUTS			; print prompt string
+	GETC			; get input
+	ST	R2,GAME_R2	; store R2 for restoring later
+	AND	R2,R2,#0	; set R2 to 0
+	ADD	R2,R2,R0	; set R2 to input character
+	JSR	PRINT_CHAR	; print input character
+	LD	R2,NXT_LN	; load ascii value for line feed into R2
+	JSR	PRINT_CHAR	; print line feed
+	JSR	PRINT_CHAR	; print line feed again
+	LD	R2,GAME_R2	; restore R2
+	LD	R3,NEG_ASCII_0	; set R3 to be #-48
+	ADD	R3,R3,R0	; add ascii value of input to #-48 to get player choice
+	BRnz	BAD_CHOICE	; if choice is below 1 it is invalid
+	ADD	R2,R2,R3	; add player choice to array pointer
+	ADD	R3,R3,#-3	; check if choice is greater than 3
+	BRp	BAD_CHOICE	; if choice it greater than 3, it is invalid
+	LDR	R3,R2,#0	; load data of array at players choice
+	BRn	BAD_CHOICE	; if the choice's corresponding page is -1, it is invalid
+	LDR	R6,R2,#0	; load choice's corresponding page number into R6
+	BR	PAGE_LOOP	; loop back with new page number
+BAD_CHOICE
+	LEA 	R0,P3_INVALID_STR	; load address of invalid string onto R0
+	PUTS				; print invalid string
+	BR	PAGE_LOOP		; loop back with same page
+DONE
+	LEA 	R0,P3_END_STR		; load address of end string onto R0
+	PUTS				; pring end string
+	HALT
+	
+GAME_R2		.BLKW #1		; block for saving R2
+NEG_ASCII_0	.FILL #-48		; holds value of #-48
+P3_START_STR	.STRINGZ "\n\n--- Starting adventure. ---\n\n"
+P3_PROMPT_STR	.STRINGZ "Please enter your choice: "
+P3_INVALID_STR	.STRINGZ "\n\n--- Invalid choice. ---\n\n"
+P3_END_STR	.STRINGZ "\n\n--- Ending adventure. ---\n\n"
+
+	; the directive below tells the assembler that the program is done
+	; (so do not write any code below it!)
+
+	.END 
+

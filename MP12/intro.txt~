@@ -1,0 +1,1 @@
+The purpose of this MP was to make a calculator program that's able to take user input and output the result of the equation.  This is done by making a tree out of the the operands and operators.  Memory is allocated for each of the nodes for the operators and operands.
